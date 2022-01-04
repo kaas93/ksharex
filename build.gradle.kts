@@ -11,7 +11,7 @@ plugins {
 group = "com.kaas93"
 version = "0.0.1"
 application {
-  mainClass.set("com.kaas93.ApplicationKt")
+  mainClassName = "io.ktor.server.netty.EngineMain"
 }
 
 repositories {
