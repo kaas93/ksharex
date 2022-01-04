@@ -9,6 +9,7 @@ import java.io.File
 class DownloadService(private val dataStore: UploadStore, private val fileStore: FileStore) {
   fun download(request: DownloadRequest): File {
     val upload = dataStore.fetch(request.uuid) ?: throw NotFoundException()
+    dataStore.save(upload.incrementDownloadCount())
     return fileStore.retrieve(upload.filename)
   }
 }
