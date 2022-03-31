@@ -1,6 +1,6 @@
-val ktor_version: String by project
-val kotlin_version: String by project
-val logback_version: String by project
+val ktorVersion: String by project
+val kotlinVersion: String by project
+val logbackVersion: String by project
 
 plugins {
   application
@@ -19,13 +19,15 @@ repositories {
 }
 
 dependencies {
-  implementation("io.ktor:ktor-server-core:$ktor_version")
-  implementation("io.ktor:ktor-locations:$ktor_version")
-  implementation("io.ktor:ktor-serialization:$ktor_version")
-  implementation("io.ktor:ktor-server-netty:$ktor_version")
-  implementation("ch.qos.logback:logback-classic:$logback_version")
-  implementation("org.kodein.di:kodein-di-framework-ktor-server-jvm:7.10.0")
+  implementation("ch.qos.logback:logback-classic:$logbackVersion")
   implementation("com.aventrix.jnanoid:jnanoid:2.0.0")
-  testImplementation("io.ktor:ktor-server-tests:$ktor_version")
-  testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+  implementation("io.ktor:ktor-server-core:$ktorVersion")
+  implementation("io.ktor:ktor-locations:$ktorVersion")
+  implementation("io.ktor:ktor-serialization:$ktorVersion")
+  implementation("io.ktor:ktor-server-netty:$ktorVersion")
+  implementation("org.kodein.di:kodein-di-framework-ktor-server-jvm:7.11.0")
+  implementation("org.litote.kmongo:kmongo-coroutine-serialization:4.5.0")
+
+  testImplementation("io.ktor:ktor-server-tests:$ktorVersion")
+  testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlinVersion")
 }

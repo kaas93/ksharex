@@ -2,3 +2,4 @@ uploads/
 gradle/
 .gradle/
 build/
+.env

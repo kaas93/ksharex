@@ -1,0 +1,30 @@
+version: '3'
+services:
+  app:
+    build:
+      context: ../
+      dockerfile: ./docker/Dockerfile
+    ports:
+      - ${APP_PORT}:${APP_PORT}
+    networks:
+      - mongo-network
+    depends_on:
+      - database
+    volumes:
+      - ../:/opt/sharex
+    environment:
+      DEVELOPMENT: ${DEV}
+      PORT: ${APP_PORT}
+
+  database:
+    restart: unless-stopped
+    image: mongo:4.4.13-focal
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: sharex
+      MONGO_INITDB_ROOT_PASSWORD: sharex
+    networks:
+      - mongo-network
+
+networks:
+  mongo-network:
+    driver: bridge
