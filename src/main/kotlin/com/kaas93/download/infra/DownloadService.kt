@@ -3,7 +3,7 @@ package com.kaas93.download.infra
 import com.kaas93.download.model.DownloadRequest
 import com.kaas93.store.model.FileStore
 import com.kaas93.upload.model.UploadStore
-import io.ktor.features.*
+import io.ktor.features.NotFoundException
 import java.io.File
 
 class DownloadService(private val dataStore: UploadStore, private val fileStore: FileStore) {

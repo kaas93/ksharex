@@ -9,10 +9,10 @@ import java.io.File
 import java.util.*
 
 class UploadService(private val dataStore: UploadStore, private val fileStore: FileStore) {
-  fun handleUpload(uploadPart: PartData.FileItem): String {
+  fun handleUpload(uploadPart: PartData.FileItem, uploader: String): String {
     ensureUploadHasFileName(uploadPart)
 
-    val upload = Upload(NanoIdUtils.randomNanoId(), uploadPart.originalFileName!!.extension(), 0, Date())
+    val upload = Upload(NanoIdUtils.randomNanoId(), uploadPart.originalFileName!!.extension(), 0, Date(), uploader)
     dataStore.save(upload)
     fileStore.save(upload.filename, uploadPart.streamProvider())
 

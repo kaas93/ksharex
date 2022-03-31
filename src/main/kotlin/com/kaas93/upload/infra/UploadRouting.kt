@@ -15,12 +15,12 @@ fun Application.addUploadRouting() {
   routing {
     post("/upload") {
       val authService by closestDI().instance<AuthService>()
-      authService.authenticate(call)
+      val uploader = authService.authenticate(call)
 
       val parts = call.receiveMultipart().readAllParts()
 
       val uploadService by closestDI().instance<UploadService>()
-      val uploads = parts.filterIsInstance<PartData.FileItem>().map(uploadService::handleUpload)
+      val uploads = parts.filterIsInstance<PartData.FileItem>().map {uploadService.handleUpload(it, uploader) }
       parts.forEach { it.dispose() }
       call.respond(HttpStatusCode.OK, uploads)
     }
