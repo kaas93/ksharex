@@ -1,18 +1,16 @@
 package com.kaas93.store.infra
 
 import com.kaas93.store.model.FileStore
-import io.ktor.http.content.*
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.InputStream
 
 class LocalFileStore : FileStore {
-  override fun save(path: String, stream: InputStream) {
+  override fun save(path: String, input: InputStream) {
     ensureUploadFolderExists()
-    val destination = upload(path).outputStream()
-    stream.copyTo(destination.buffered())
-    stream.close()
-    destination.close()
+    val destination = upload(path)
+    destination.writeBytes(input.readBytes())
+    input.close()
   }
 
   override fun retrieve(path: String): File {

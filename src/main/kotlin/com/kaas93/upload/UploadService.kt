@@ -14,7 +14,7 @@ class UploadService(private val dataStore: UploadStore, private val fileStore: F
 
     val upload = Upload(uploadPart.originalFileName!!.extension(), 0, Date(), uploader)
     dataStore.save(upload)
-    fileStore.save(upload.filename, uploadPart.streamProvider())
+    fileStore.save(upload.filename, uploadPart.streamProvider().buffered())
 
     return upload.id
   }
