@@ -1,13 +1,8 @@
 package com.kaas93.download.model
 
-import io.ktor.locations.*
-import kotlinx.serialization.KSerializer
+import io.ktor.locations.Location
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.descriptors.PrimitiveKind
-import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
-import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
-import java.util.*
+import java.util.UUID
 
 @Serializable
 @Location("/u/{uuid}")
@@ -16,14 +11,3 @@ data class DownloadRequest(
   val uuid: UUID
 )
 
-object UUIDSerializer : KSerializer<UUID> {
-  override val descriptor = PrimitiveSerialDescriptor("UUID", PrimitiveKind.STRING)
-
-  override fun deserialize(decoder: Decoder): UUID {
-    return UUID.fromString(decoder.decodeString())
-  }
-
-  override fun serialize(encoder: Encoder, value: UUID) {
-    encoder.encodeString(value.toString())
-  }
-}
