@@ -1,5 +1,6 @@
 package com.kaas93.upload
 
+import com.aventrix.jnanoid.jnanoid.NanoIdUtils
 import com.kaas93.store.model.FileStore
 import com.kaas93.upload.model.Upload
 import com.kaas93.upload.model.UploadStore
@@ -11,11 +12,11 @@ class UploadService(private val dataStore: UploadStore, private val fileStore: F
   fun handleUpload(uploadPart: PartData.FileItem): String {
     ensureUploadHasFileName(uploadPart)
 
-    val upload = Upload(UUID.randomUUID(), uploadPart.originalFileName!!.extension(), 0, Date())
+    val upload = Upload(NanoIdUtils.randomNanoId(), uploadPart.originalFileName!!.extension(), 0, Date())
     dataStore.save(upload)
     fileStore.save(upload.filename, uploadPart.streamProvider())
 
-    return upload.id.toString()
+    return upload.id
   }
 
   companion object {

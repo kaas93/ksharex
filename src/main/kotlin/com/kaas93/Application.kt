@@ -7,8 +7,8 @@ fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
 fun Application.module() {
   configureDependencyInjection()
-  configureDataConversion()
   configureRouting()
   configureHTTP()
   configureSerialization()
+  configureStatusPages()
 }

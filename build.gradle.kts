@@ -25,6 +25,7 @@ dependencies {
   implementation("io.ktor:ktor-server-netty:$ktor_version")
   implementation("ch.qos.logback:logback-classic:$logback_version")
   implementation("org.kodein.di:kodein-di-framework-ktor-server-jvm:7.10.0")
+  implementation("com.aventrix.jnanoid:jnanoid:2.0.0")
   testImplementation("io.ktor:ktor-server-tests:$ktor_version")
   testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
 }

@@ -4,10 +4,8 @@ import io.ktor.locations.Location
 import kotlinx.serialization.Serializable
 import java.util.UUID
 
-@Serializable
 @Location("/u/{uuid}")
 data class DownloadRequest(
-  @Serializable(with = UUIDSerializer::class)
-  val uuid: UUID
+  val uuid: String
 )
 

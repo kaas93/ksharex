@@ -1,13 +1,11 @@
 package com.kaas93.store.model
 
-import java.util.*
-
 interface Store<T : StoreItem> {
-  fun fetch(id: UUID): T?
+  fun fetch(id: String): T?
   fun save(item: T)
-  fun delete(id: UUID)
+  fun delete(id: String)
 }
 
 interface StoreItem {
-  val id: UUID
+  val id: String
 }
