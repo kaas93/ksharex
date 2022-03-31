@@ -1,4 +1,4 @@
-package com.kaas93.upload
+package com.kaas93.upload.infra
 
 import com.kaas93.store.model.FileStore
 import com.kaas93.upload.model.Upload

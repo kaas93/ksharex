@@ -3,12 +3,14 @@ package com.kaas93.plugins
 import com.kaas93.auth.Auth
 import com.kaas93.auth.AuthService
 import com.kaas93.auth.AuthStore
+import com.kaas93.download.infra.DownloadController
 import com.kaas93.download.infra.DownloadService
 import com.kaas93.store.infra.InMemoryStore
 import com.kaas93.store.infra.LocalFileStore
 import com.kaas93.store.infra.MongoStore
 import com.kaas93.store.model.FileStore
-import com.kaas93.upload.UploadService
+import com.kaas93.upload.infra.UploadController
+import com.kaas93.upload.infra.UploadService
 import com.kaas93.upload.model.UploadStore
 import io.ktor.application.Application
 import kotlinx.coroutines.runBlocking
@@ -32,9 +34,15 @@ fun Application.configureDependencyInjection() {
     authStore.save(Auth(auth))
   }
 
+  val downloadService = DownloadService(uploadStore, localFileStore)
+  val uploadService = UploadService(uploadStore, localFileStore)
+  val authService = AuthService(authStore)
+
   di {
-    bind { singleton { DownloadService(uploadStore, localFileStore) } }
-    bind { singleton { UploadService(uploadStore, localFileStore) } }
-    bind { singleton { AuthService(authStore) } }
+    bind { singleton { downloadService } }
+    bind { singleton { uploadService } }
+    bind { singleton { authService } }
+    bind { singleton { UploadController(authService, uploadService) } }
+    bind { singleton { DownloadController(downloadService) } }
   }
 }
