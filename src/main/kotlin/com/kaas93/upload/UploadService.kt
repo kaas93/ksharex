@@ -1,18 +1,18 @@
 package com.kaas93.upload
 
-import com.aventrix.jnanoid.jnanoid.NanoIdUtils
 import com.kaas93.store.model.FileStore
 import com.kaas93.upload.model.Upload
 import com.kaas93.upload.model.UploadStore
-import io.ktor.http.content.*
+import io.ktor.http.content.PartData
+import io.ktor.http.content.streamProvider
 import java.io.File
-import java.util.*
+import java.util.Date
 
 class UploadService(private val dataStore: UploadStore, private val fileStore: FileStore) {
-  fun handleUpload(uploadPart: PartData.FileItem, uploader: String): String {
+  suspend fun handleUpload(uploadPart: PartData.FileItem, uploader: String): String {
     ensureUploadHasFileName(uploadPart)
 
-    val upload = Upload(NanoIdUtils.randomNanoId(), uploadPart.originalFileName!!.extension(), 0, Date(), uploader)
+    val upload = Upload(uploadPart.originalFileName!!.extension(), 0, Date(), uploader)
     dataStore.save(upload)
     fileStore.save(upload.filename, uploadPart.streamProvider())
 

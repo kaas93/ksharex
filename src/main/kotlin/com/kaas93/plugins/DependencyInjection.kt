@@ -1,32 +1,40 @@
 package com.kaas93.plugins
 
-import com.aventrix.jnanoid.jnanoid.NanoIdUtils
 import com.kaas93.auth.Auth
 import com.kaas93.auth.AuthService
 import com.kaas93.auth.AuthStore
 import com.kaas93.download.infra.DownloadService
 import com.kaas93.store.infra.InMemoryStore
 import com.kaas93.store.infra.LocalFileStore
+import com.kaas93.store.infra.MongoStore
 import com.kaas93.store.model.FileStore
 import com.kaas93.upload.UploadService
 import com.kaas93.upload.model.UploadStore
 import io.ktor.application.Application
+import kotlinx.coroutines.runBlocking
 import org.kodein.di.bind
 import org.kodein.di.ktor.di
 import org.kodein.di.singleton
+import org.litote.kmongo.coroutine.coroutine
+import org.litote.kmongo.reactivestreams.KMongo
 
-fun Application.configureDependencyInjection(
-  inMemoryUploadStore: UploadStore = InMemoryStore(),
-  inMemoryAuthStore: AuthStore = InMemoryStore(),
-  localFileStore: FileStore = LocalFileStore()
-) {
-  val auth = NanoIdUtils.randomNanoId()
-  println(auth)
-  inMemoryAuthStore.save(Auth(auth))
+fun Application.configureDependencyInjection() {
+  val client = KMongo.createClient("mongodb://sharex:sharex@localhost")
+  val database = client.coroutine.getDatabase(environment.config.property("ktor.sharex.mongoDb").getString())
+
+  val useMongo = "true" == environment.config.property("ktor.sharex.useMongo").getString()
+  val uploadStore: UploadStore = if (useMongo) MongoStore.from(database) else InMemoryStore()
+  val authStore: AuthStore = if (useMongo) MongoStore.from(database) else InMemoryStore()
+  val localFileStore: FileStore = LocalFileStore()
+
+  runBlocking {
+    val auth = environment.config.property("ktor.sharex.apiKey").getString()
+    authStore.save(Auth(auth))
+  }
 
   di {
-    bind { singleton { DownloadService(inMemoryUploadStore, localFileStore) } }
-    bind { singleton { UploadService(inMemoryUploadStore, localFileStore) } }
-    bind { singleton { AuthService(inMemoryAuthStore) } }
+    bind { singleton { DownloadService(uploadStore, localFileStore) } }
+    bind { singleton { UploadService(uploadStore, localFileStore) } }
+    bind { singleton { AuthService(authStore) } }
   }
 }

@@ -9,8 +9,10 @@ import java.io.InputStream
 class LocalFileStore : FileStore {
   override fun save(path: String, stream: InputStream) {
     ensureUploadFolderExists()
-    val destination = upload(path)
-    stream.copyTo(destination.outputStream().buffered())
+    val destination = upload(path).outputStream()
+    stream.copyTo(destination.buffered())
+    stream.close()
+    destination.close()
   }
 
   override fun retrieve(path: String): File {

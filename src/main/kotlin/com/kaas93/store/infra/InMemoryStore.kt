@@ -7,12 +7,12 @@ import io.ktor.features.NotFoundException
 class InMemoryStore<T : StoreItem> : Store<T> {
   private val storage = mutableMapOf<String, T>()
 
-  override fun fetch(id: String): T? = storage[id]
-  override fun save(item: T) {
+  override suspend fun fetch(id: String): T? = storage[id]
+  override suspend fun save(item: T) {
     storage[item.id] = item
   }
 
-  override fun delete(id: String) {
+  override suspend fun delete(id: String) {
     if (!storage.containsKey(id)) throw NotFoundException()
     storage.remove(id)
   }
